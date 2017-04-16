@@ -48,6 +48,7 @@ $(document).ready(function() {
     event.preventDefault();
     var formdata = $(this).serialize();
     console.log('formdata: ' + formdata);
+    console.log('formdata.songs: ' + formdata.songs);
     $.post('http://localhost:3000/api/albums',  formdata);
     $(this).trigger("reset");
   });
