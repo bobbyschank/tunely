@@ -46,10 +46,13 @@ $(document).ready(function() {
   $("#newAlbum").submit(function(event) {
     console.log('SUBMIT baby, YEAH!!');
     event.preventDefault();
+    var formdata = $(this).serialize();
+    console.log('formdata: ' + formdata);
+    $.post('http://localhost:3000/api/albums',  formdata);
     $(this).trigger("reset");
   });
 
-// this function takes a single album and renders it to the page
+  // this function takes a single album and renders it to the page
   function renderAlbum(album) {
     console.log('rendering album:', album);
 
@@ -92,15 +95,9 @@ $(document).ready(function() {
     "          </div>" +
     "          <!-- end one album -->";
 
-
-
-
     // render to the page with jQuery
     $("#albums").append(albumHtml);
     // $("#albums").append( "<p>Test</p>" );
     console.log('in renderAlbum');
   }
-
-
-
 });
