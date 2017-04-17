@@ -53,25 +53,52 @@ app.get('/api/albums', function album_index(req, res){
 });
 console.log('server');
 
-app.post('/api/albums/:album_id/songs', function(req, res) {
-  console.log('POST NEW SONG');
-  console.log('req.body.name: ' + req.body.name);
-  console.log('req.params.album_id: ' + req.params.album_id);
-  let name = req.body.name;
-  let trackNumber = req.body.trackNumber;
-  let albumId = req.params.album_id;
+// app.post('/api/albums/:album_id/songs', function(req, res) {
+//   console.log('POST NEW SONG');
+//   console.log('req.body.name: ' + req.body.name);
+//   console.log('req.params.album_id: ' + req.params.album_id);
+//   let name = req.body.name;
+//   let trackNumber = req.body.trackNumber;
+//   let albumId = req.params.album_id;
 
-  // db.Album.findOne({_id: req.params.album_id}, function (err, album) {
-  //   if (err) return handleError(err);
-  //   console.log('songs1: ' + album.songs);
-    db.Song.create({name: name, trackNumber: trackNumber}, function (err, song){
-      if (err) console.log(err);
-      db.Album.update({_id: albumId}, {$push: {songs: song}});
-      console.log('song: ' + song);
-    });
-  // console.log('songs2: ' + album.songs);
-  // });
+//   // db.Album.findOne({_id: req.params.album_id}, function (err, album) {
+//   //   if (err) return handleError(err);
+//   //   console.log('songs1: ' + album.songs);
+//     db.Song.create({name: name, trackNumber: trackNumber}, function (err, song){
+//       if (err) console.log(err);
+//       db.Album.update({_id: albumId}, {$push: {songs: song}});
+//       console.log('song: ' + song);
+//     });
+//   // console.log('songs2: ' + album.songs);
+//   // });
+// });
+
+
+app.post('/api/albums/:album_id/songs', function (req, res) {
+  // Get book id from url params (`req.params`)
+  var albumId = req.params.album_id;
+  db.Album.findById(albumId)
+    // .populate('author') // Reference to author
+    // now we can worry about saving that character
+    .exec(function(err, foundAlbum) {
+      console.log('foundAlbum: ' + foundAlbum);
+      if (err) {
+        res.status(500).json({error: err.message});
+      } else if (foundAlbum === null) {
+        // Is this the same as checking if the foundBook is undefined?
+        res.status(404).json({error: "No Book found by this ID"});
+      } else {
+        // push character into characters array
+        foundAlbum.songs.push(req.body);
+        // save the book with the new character
+        foundAlbum.save();
+        res.status(201).json(foundAlbum);
+      }
+    }
+  );
 });
+
+
 
 app.post('/api/albums', function(req, res) {
   let genresString = req.body.genres;

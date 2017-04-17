@@ -26,7 +26,6 @@ $(document).ready(function() {
   });
 
   $('#albums').on('click', '.add-song', function(e) {
-    console.log('asdfasdfasdf');
     var id= $(this).parents('.album').data('album-id'); // "5665ff1678209c64e51b4e7b"
     console.log('id',id);
     $('#songModal').data('album-id', id);
@@ -54,11 +53,11 @@ $(document).ready(function() {
   // POST to SERVER
   $.post(URL, entry);
   // clear form
-  $(this).trigger("reset");
+  $('#songModal').modal('toggle');
   // close modal
   // update the correct album to show the new song
+  });
 });
-
 
   function buildSongsHtml(songs) {
     resultString = '';
@@ -127,4 +126,4 @@ $(document).ready(function() {
     // $("#albums").append( "<p>Test</p>" );
     console.log('in renderAlbum');
   }
-});
+
