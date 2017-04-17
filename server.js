@@ -35,8 +35,6 @@ app.get('/', function homepage (req, res) {
 
 var db = require('./models');
 
-
-
 app.get('/api', function api_index (req, res){
   res.json({
     message: "Welcome to tunely!",
@@ -61,10 +59,18 @@ app.post('/api/albums/:album_id/songs', function(req, res) {
   console.log('req.params.album_id: ' + req.params.album_id);
   let name = req.body.name;
   let trackNumber = req.body.trackNumber;
-  let albumFound = db.Album.findOne({_id: req.params.album_id}, function (err, album) {
-    if (err) return handleError(err);
-    console.log(album.songs);
-  });
+  let albumId = req.params.album_id;
+
+  // db.Album.findOne({_id: req.params.album_id}, function (err, album) {
+  //   if (err) return handleError(err);
+  //   console.log('songs1: ' + album.songs);
+    db.Song.create({name: name, trackNumber: trackNumber}, function (err, song){
+      if (err) console.log(err);
+      db.Album.update({_id: albumId}, {$push: {songs: song}});
+      console.log('song: ' + song);
+    });
+  // console.log('songs2: ' + album.songs);
+  // });
 });
 
 app.post('/api/albums', function(req, res) {
