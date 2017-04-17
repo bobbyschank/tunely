@@ -5,33 +5,6 @@
  *
  */
 
-/* hard-coded data! */
-var sampleAlbums = [];
-sampleAlbums.push({
-             artistName: 'Ladyhawke',
-             name: 'Ladyhawke',
-             releaseDate: '2008, November 18',
-             genres: [ 'new wave', 'indie rock', 'synth pop' ]
-           });
-sampleAlbums.push({
-             artistName: 'The Knife',
-             name: 'Silent Shout',
-             releaseDate: '2006, February 17',
-             genres: [ 'synth pop', 'electronica', 'experimental' ]
-           });
-sampleAlbums.push({
-             artistName: 'Juno Reactor',
-             name: 'Shango',
-             releaseDate: '2000, October 9',
-             genres: [ 'electronic', 'goa trance', 'tribal house' ]
-           });
-sampleAlbums.push({
-             artistName: 'Philip Wesley',
-             name: 'Dark Night of the Soul',
-             releaseDate: '2008, September 12',
-             genres: [ 'piano' ]
-           });
-/* end of hard-coded data */
 
 $(document).ready(function() {
   console.log('app.js loaded!');
@@ -52,28 +25,27 @@ $(document).ready(function() {
     $(this).trigger("reset");
   });
 
-  var sampleSongs = [];
-sampleSongs.push({ name: 'Famous',
-                   trackNumber: 1
+  $('#albums').on('click', '.add-song', function(e) {
+    console.log('asdfasdfasdf');
+    var id= $(this).parents('.album').data('album-id'); // "5665ff1678209c64e51b4e7b"
+    console.log('id',id);
+    $('#songModal').data('album-id', id);
+    console.log('songModal album-id: ' + $('#songModal').data('album-id'));
+    $('#songModal').modal();
+  });
+
+  $('#saveSong').on('click', function handleNewSongSubmit(e) {
+  e.preventDefault();
+  // not crazy
+  console.log('not crazy today');
+  // get data from modal fields
+  
+  // POST to SERVER
+  // clear form
+  // close modal
+  // update the correct album to show the new song
 });
-sampleSongs.push({ name: "All of the Lights",
-                   trackNumber: 2
-});
-sampleSongs.push({ name: 'Guilt Trip',
-                   trackNumber: 3
-});
-sampleSongs.push({ name: 'Paranoid',
-                   trackNumber: 4
-});
-sampleSongs.push({ name: 'Ultralight Beam',
-                   trackNumber: 5
-});
-sampleSongs.push({ name: 'Runaway',
-                   trackNumber: 6
-});
-sampleSongs.push({ name: 'Stronger',
-                   trackNumber: 7
-});
+
 
   function buildSongsHtml(songs) {
     resultString = '';
@@ -89,10 +61,6 @@ sampleSongs.push({ name: 'Stronger',
     );
   }
 
-  buildSongsHtml(sampleSongs);
-
-
-
   // this function takes a single album and renders it to the page
   function renderAlbum(album) {
     console.log('rendering album:', album);
@@ -101,7 +69,7 @@ sampleSongs.push({ name: 'Stronger',
 
     var albumHtml =
     "        <!-- one album -->" +
-    "        <div class='row album' data-album-id='" + "HARDCODED ALBUM ID" + "'>" +
+    "        <div class='row album' data-album-id='" + album._id + "'>" +
     "          <div class='col-md-10 col-md-offset-1'>" +
     "            <div class='panel panel-default'>" +
     "              <div class='panel-body'>" +
@@ -132,6 +100,9 @@ sampleSongs.push({ name: 'Stronger',
     "              </div>" + // end of panel-body
 
     "              <div class='panel-footer'>" +
+    "               <div class='panel-footer'>" +
+    "                 <button class='btn btn-primary add-song'>Add Song</button>" +
+    "               </div>" +
     "              </div>" +
 
     "            </div>" +
