@@ -55,6 +55,18 @@ app.get('/api/albums', function album_index(req, res){
 });
 console.log('server');
 
+app.post('/api/albums/:album_id/songs', function(req, res) {
+  console.log('POST NEW SONG');
+  console.log('req.body.name: ' + req.body.name);
+  console.log('req.params.album_id: ' + req.params.album_id);
+  let name = req.body.name;
+  let trackNumber = req.body.trackNumber;
+  let albumFound = db.Album.findOne({_id: req.params.album_id}, function (err, album) {
+    if (err) return handleError(err);
+    console.log(album.songs);
+  });
+});
+
 app.post('/api/albums', function(req, res) {
   let genresString = req.body.genres;
   let genresArray = genresString.split(", ");

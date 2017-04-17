@@ -39,9 +39,22 @@ $(document).ready(function() {
   // not crazy
   console.log('not crazy today');
   // get data from modal fields
-  
+  let songName = $('#songName').val();
+  let trackNumber = $('#trackNumber').val();
+  let entry = {
+    name: songName,
+    trackNumber: trackNumber
+  };
+  let albumId = $('#songModal').data('album-id');
+  let URL = 'http://localhost:3000/api/albums/' + albumId + '/songs';
+  console.log('songName: ' + songName);
+  console.log('trackNumber: ' + trackNumber);
+  console.log('album-id: ' + albumId);
+
   // POST to SERVER
+  $.post(URL, entry);
   // clear form
+  $(this).trigger("reset");
   // close modal
   // update the correct album to show the new song
 });
