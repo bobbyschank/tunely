@@ -37,7 +37,6 @@ $(document).ready(function() {
   console.log('app.js loaded!');
 
   $.get('http://localhost:3000/api/albums', function(albums) {
-    console.log(albums);
     albums.forEach(function(album) {
       renderAlbum(album);
     });
@@ -53,9 +52,52 @@ $(document).ready(function() {
     $(this).trigger("reset");
   });
 
+  var sampleSongs = [];
+sampleSongs.push({ name: 'Famous',
+                   trackNumber: 1
+});
+sampleSongs.push({ name: "All of the Lights",
+                   trackNumber: 2
+});
+sampleSongs.push({ name: 'Guilt Trip',
+                   trackNumber: 3
+});
+sampleSongs.push({ name: 'Paranoid',
+                   trackNumber: 4
+});
+sampleSongs.push({ name: 'Ultralight Beam',
+                   trackNumber: 5
+});
+sampleSongs.push({ name: 'Runaway',
+                   trackNumber: 6
+});
+sampleSongs.push({ name: 'Stronger',
+                   trackNumber: 7
+});
+
+  function buildSongsHtml(songs) {
+    resultString = '';
+    songs.forEach(function(song){
+      resultString = resultString + `– (` + song.trackNumber + ') ' + song.name + ` –`;
+    });
+    console.log('resultString: ' + resultString);
+    return(
+      '<li class="list-group-item">' +
+      '  <h4 class="inline-header">Songs:</h4>' +
+      '  <span> ' + resultString + ' </span>' +
+      '</li>'
+    );
+  }
+
+  buildSongsHtml(sampleSongs);
+
+
+
   // this function takes a single album and renders it to the page
   function renderAlbum(album) {
     console.log('rendering album:', album);
+
+    var songList = buildSongsHtml(album.songs);
 
     var albumHtml =
     "        <!-- one album -->" +
@@ -81,7 +123,7 @@ $(document).ready(function() {
     "                      <li class='list-group-item'>" +
     "                        <h4 class='inline-header'>Released date:</h4>" +
     "                        <span class='album-releaseDate'>" + album.releaseDate + "</span>" +
-    "                      </li>" +
+    "                      </li>" + songList +
     "                    </ul>" +
     "                  </div>" +
     "                </div>" +
