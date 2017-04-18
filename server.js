@@ -47,10 +47,20 @@ app.get('/api', function api_index (req, res){
 });
 
 app.get('/api/albums/:album_id', function (req, res) {
-  db.Album.findById(req.params.album_id)
-    .exec(function(err, foundAlbum) {
-      res.json(foundAlbum);      
-    });
+  console.log('IN SERVER SIDE UPDATE ALBUM');
+  console.log('album_id: ' + req.params.album_id);
+  let albumId = req.params.album_id;
+
+  var query = {};
+  query._id = albumId;
+  db.Album.find(query, function(err, foundAlbum) {
+    console.log('foundAlbum: ' + foundAlbum);
+    res.json({foundAlbum: foundAlbum});
+  });
+    // .exec(function(err, foundAlbum) {
+    //   console.log('foundAlbum: ' + foundAlbum);
+    //   res.json(foundAlbum);      
+    // });
 });
 
 app.get('/api/albums', function album_index(req, res){
@@ -69,12 +79,9 @@ app.post('/api/albums/:album_id/songs', function (req, res) {
       if (err) {
         res.status(500).json({error: err.message});
       } else if (foundAlbum === null) {
-        // Is this the same as checking if the foundBook is undefined?
         res.status(404).json({error: "No Book found by this ID"});
       } else {
-        // push character into characters array
         foundAlbum.songs.push(req.body);
-        // save the book with the new character
         foundAlbum.save();
         res.status(201).json(foundAlbum);
       }

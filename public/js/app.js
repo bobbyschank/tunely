@@ -5,7 +5,6 @@
  *
  */
 
-
 $(document).ready(function() {
   console.log('app.js loaded!');
 
@@ -27,7 +26,7 @@ $(document).ready(function() {
 
   $('#albums').on('click', '.add-song', function(e) {
     var id= $(this).parents('.album').data('album-id'); // "5665ff1678209c64e51b4e7b"
-    console.log('id',id);
+    console.log('id', id);
     $('#songModal').data('album-id', id);
     console.log('songModal album-id: ' + $('#songModal').data('album-id'));
     $('#songModal').modal();
@@ -51,27 +50,26 @@ $(document).ready(function() {
     console.log('album-id: ' + albumId);
 
     // POST to SERVER
-    $.post(URL, entry);
-
+    $.post(URL, entry, function(data) {
+      console.log('Post callback, data: ' + data.name);
+      let updateURL = 'http://localhost:3000/api/albums/' + albumId;
+      console.log('OOOOOO: albumId: ' + updateURL);
+      $("#" + albumId + "").remove();
+      renderAlbum(data);
+      // $.get(updateURL, function(foundAlbum) {
+      //   console.log('XXXXXX album: ' + foundAlbum.name);
+      //   renderAlbum(data);
+      // });
+    });
+    console.log('Post Sync: ');
     // clear form
     $('#songName').val('');
     $('#trackNumber').val('');
     // close modal
     $('#songModal').modal('toggle');
     // update the correct album to show the new song
-    let updateURL = 'http://localhost:3000/api/albums/' + albumId;
-    $.get(updateURL, function(album) {
-      console.log('IN UPDATE ALBUM');
-      renderAlbum(album);
-    });
   });
-});
 
-  // $.get('http://localhost:3000/api/albums', function(albums) {
-  //   albums.forEach(function(album) {
-  //     renderAlbum(album);
-  //   });
-  // });
 
 function buildSongsHtml(songs) {
   resultString = '';
@@ -95,7 +93,7 @@ function renderAlbum(album) {
 
   var albumHtml =
   "        <!-- one album -->" +
-  "        <div class='row album' data-album-id='" + album._id + "'>" +
+  "        <div id='" + album._id + "' class='row album' data-album-id='" + album._id + "'>" +
   "          <div class='col-md-10 col-md-offset-1'>" +
   "            <div class='panel panel-default'>" +
   "              <div class='panel-body'>" +
@@ -141,3 +139,4 @@ function renderAlbum(album) {
   console.log('in renderAlbum');
 }
 
+});
